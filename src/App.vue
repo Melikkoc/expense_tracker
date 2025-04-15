@@ -90,50 +90,50 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-
+import { ref } from 'vue';
 const transactionRows = ref([
   {
-    date: "",
-    category: "",
-    description: "",
-    type: "",
-    note: "",
-    paymentMethod: "",
+    date: '',
+    category: '',
+    description: '',
+    type: '',
+    note: '',
+    paymentMethod: '',
     recurring: false,
-    tags: "",
+    tags: '',
     amount: 0,
   },
 ]);
 const summaryRows = ref([
   {
-    month: "",
+    month: '',
     rent: 0,
     subscriptions: 0,
     transportation: 0,
     groceries: 0,
-    total_expenses: "",
+    total_expenses: '',
     savings: 0,
     total_income: 0,
     remaining: 0,
   },
 ]);
+
 function addTableCell() {
   transactionRows.value.push({
-    date: "",
-    category: "",
-    description: "",
-    type: "",
-    note: "",
-    paymentMethod: "",
+    date: '',
+    category: '',
+    description: '',
+    type: '',
+    note: '',
+    paymentMethod: '',
     recurring: false,
-    tags: "",
+    tags: '',
     amount: 0,
   });
 }
 function addTableCell2() {
   summaryRows.value.push({
-    month: "",
+    month: '',
     rent: 0,
     subscriptions: 0,
     transportation: 0,
@@ -156,13 +156,14 @@ function getTotalExpenses() {
 }
 
 function getTotalIncome() {
-  var amount = transactionRows.value.forEach((row) => {
+  var total_income = transactionRows.value.reduce((acc, row) => {
     const amount = row.amount;
+    return acc + amount;
+  }, 0);
+
+  summaryRows.value.forEach((row) => {
+    row.total_income = total_income;
   });
-  var total_income = summaryRows.value.forEach((row) => {
-    const total_income = row.total_income;
-  });
-  total_income = amount;
 }
 
 function getRemaining() {
@@ -171,7 +172,7 @@ function getRemaining() {
     const savings = row.savings;
     const total_income = row.total_income;
 
-    row.remaining = savings + total_expenses - total_income;
+    row.remaining = total_income - total_expenses + savings;
   });
 }
 </script>
