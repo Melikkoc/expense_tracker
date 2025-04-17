@@ -5,6 +5,7 @@
     <button @click="getTotalExpenses">bla bla</button>
     <button @click="getTotalIncome">ble ble ble</button>
     <button @click="getRemaining">blu blu blu</button>
+    <button @click="deleteTableRow">delete</button>
     <div class="box">
       <table>
         <caption>
@@ -90,8 +91,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-const transactionRows = ref([
+import useLocalStorage from './composables/useLocalStorage';
+const transactionRows = useLocalStorage([
   {
     date: '',
     category: '',
@@ -104,7 +105,7 @@ const transactionRows = ref([
     amount: 0,
   },
 ]);
-const summaryRows = ref([
+const summaryRows = useLocalStorage([
   {
     month: '',
     rent: 0,
@@ -144,6 +145,7 @@ function addTableCell2() {
     remaining: 0,
   });
 }
+
 function getTotalExpenses() {
   summaryRows.value.forEach((row) => {
     const rent = row.rent;
