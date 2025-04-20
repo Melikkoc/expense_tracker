@@ -2,10 +2,10 @@
   <main>
     <button @click="addTableCell">Add Transaction</button>
     <button @click="addTableCell2">Add Summary</button>
-    <button @click="getTotalExpenses">bla bla</button>
-    <button @click="getTotalIncome">ble ble ble</button>
-    <button @click="getRemaining">blu blu blu</button>
-    <button @click="deleteTableRow">delete</button>
+    <button @click="getTotalExpenses">get Total Expenses</button>
+    <button @click="getTotalIncome">get Total Income</button>
+    <button @click="getRemaining">get Remaining</button>
+    <button @click="deleteTableRow">delete Transaction Row</button>
     <div class="box">
       <table>
         <caption>
@@ -87,37 +87,46 @@
         </tbody>
       </table>
     </div>
+    <button @click="deleteTableRow2">delete Summary Row</button>
   </main>
 </template>
 
 <script setup>
 import useLocalStorage from './composables/useLocalStorage';
-const transactionRows = useLocalStorage([
+import { computed } from 'vue';
+const expenseTable = useLocalStorage(
   {
-    date: '',
-    category: '',
-    description: '',
-    type: '',
-    note: '',
-    paymentMethod: '',
-    recurring: false,
-    tags: '',
-    amount: 0,
+    summaryRows: [
+      {
+        month: '',
+        rent: 0,
+        subscriptions: 0,
+        transportation: 0,
+        groceries: 0,
+        total_expenses: '',
+        savings: 0,
+        total_income: 0,
+        remaining: 0,
+      },
+    ],
+    transactionRows: [
+      {
+        date: '',
+        category: '',
+        description: '',
+        type: '',
+        note: '',
+        paymentMethod: '',
+        recurring: false,
+        tags: '',
+        amount: 0,
+      },
+    ],
   },
-]);
-const summaryRows = useLocalStorage([
-  {
-    month: '',
-    rent: 0,
-    subscriptions: 0,
-    transportation: 0,
-    groceries: 0,
-    total_expenses: '',
-    savings: 0,
-    total_income: 0,
-    remaining: 0,
-  },
-]);
+  'expenseTable'
+);
+const transactionRows = computed(() => expenseTable.value.transactionRows);
+const summaryRows = computed(() => expenseTable.value.summaryRows);
 
 function addTableCell() {
   transactionRows.value.push({
@@ -132,6 +141,7 @@ function addTableCell() {
     amount: 0,
   });
 }
+
 function addTableCell2() {
   summaryRows.value.push({
     month: '',
@@ -176,6 +186,13 @@ function getRemaining() {
 
     row.remaining = total_income - total_expenses + savings;
   });
+}
+
+function deleteTableRow() {
+  transactionRows.value.pop();
+}
+function deleteTableRow2() {
+  summaryRows.value.pop();
 }
 </script>
 
