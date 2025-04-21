@@ -51,11 +51,7 @@
           <tr v-for="(row, index) in summaryRows" :key="index">
             <td><input type="text" v-model="row.month" /></td>
             <td>
-              <input
-                type="number"
-                v-model="row.rent"
-                @keyup="getTotalExpenses"
-              />
+              <input type="number" v-model="row.rent" />
             </td>
             <td>
               <input type="number" v-model="row.subscriptions" />
