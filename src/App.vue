@@ -1,10 +1,7 @@
 <template>
   <main>
-    <button @click="addTableCell">Add Transaction</button>
-    <button @click="addTableCell2">Add Summary</button>
-    <button @click="getTotalExpenses">get Total Expenses</button>
-    <button @click="getTotalIncome">get Total Income</button>
-    <button @click="getRemaining">get Remaining</button>
+    <button @click="addTransactionRow">Add Transaction</button>
+
     <div class="box">
       <table>
         <caption>
@@ -53,7 +50,13 @@
           </tr>
           <tr v-for="(row, index) in summaryRows" :key="index">
             <td><input type="text" v-model="row.month" /></td>
-            <td><input type="number" v-model="row.rent" /></td>
+            <td>
+              <input
+                type="number"
+                v-model="row.rent"
+                @keyup="getTotalExpenses"
+              />
+            </td>
             <td>
               <input type="number" v-model="row.subscriptions" />
             </td>
@@ -90,12 +93,13 @@
         </tbody>
       </table>
     </div>
+    <button @click="addSummaryRow">Add Summary</button>
   </main>
 </template>
 
 <script setup>
 import useLocalStorage from './composables/useLocalStorage';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 const expenseTable = useLocalStorage(
   {
     summaryRows: [
@@ -130,7 +134,7 @@ const expenseTable = useLocalStorage(
 const transactionRows = computed(() => expenseTable.value.transactionRows);
 const summaryRows = computed(() => expenseTable.value.summaryRows);
 
-function addTableCell() {
+function addTransactionRow() {
   transactionRows.value.push({
     date: '',
     category: '',
@@ -144,7 +148,7 @@ function addTableCell() {
   });
 }
 
-function addTableCell2() {
+function addSummaryRow() {
   summaryRows.value.push({
     month: '',
     rent: 0,
@@ -186,7 +190,7 @@ function getRemaining() {
     const savings = row.savings;
     const total_income = row.total_income;
 
-    row.remaining = total_income - total_expenses + savings;
+    row.remaining = total_income - total_expenses - savings;
   });
 }
 
@@ -197,6 +201,24 @@ function deleteTransactionRow(index) {
 function deleteSummaryRow(index) {
   summaryRows.value.splice(index, 1);
 }
+
+watch(
+  transactionRows,
+  () => {
+    getTotalIncome();
+    getRemaining();
+  },
+  { deep: true }
+);
+
+watch(
+  summaryRows,
+  () => {
+    getTotalExpenses();
+    getRemaining();
+  },
+  { deep: true }
+);
 </script>
 
 <style>
