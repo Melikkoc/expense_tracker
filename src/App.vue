@@ -5,7 +5,6 @@
     <button @click="getTotalExpenses">get Total Expenses</button>
     <button @click="getTotalIncome">get Total Income</button>
     <button @click="getRemaining">get Remaining</button>
-    <button @click="deleteTableRow">delete Transaction Row</button>
     <div class="box">
       <table>
         <caption>
@@ -22,6 +21,7 @@
             <th>Recurring</th>
             <th>Tags</th>
             <th>Amount(€)</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -35,6 +35,7 @@
             <td><input type="checkbox" v-model="row.recurring" /></td>
             <td><input type="text" v-model="row.tags" /></td>
             <td><input type="number" v-model="row.amount" /></td>
+            <td><button @click="deleteTransactionRow(index)">❌</button></td>
           </tr>
         </tbody>
         <tbody>
@@ -48,6 +49,7 @@
             <th>Savings</th>
             <th>Total Income</th>
             <th>Remaining</th>
+            <th>Delete</th>
           </tr>
           <tr v-for="(row, index) in summaryRows" :key="index">
             <td><input type="text" v-model="row.month" /></td>
@@ -83,11 +85,11 @@
                 v-model="row.remaining"
               />
             </td>
+            <td><button @click="deleteSummaryRow(index)">❌</button></td>
           </tr>
         </tbody>
       </table>
     </div>
-    <button @click="deleteTableRow2">delete Summary Row</button>
   </main>
 </template>
 
@@ -188,11 +190,12 @@ function getRemaining() {
   });
 }
 
-function deleteTableRow() {
-  transactionRows.value.pop();
+function deleteTransactionRow(index) {
+  transactionRows.value.splice(index, 1);
 }
-function deleteTableRow2() {
-  summaryRows.value.pop();
+
+function deleteSummaryRow(index) {
+  summaryRows.value.splice(index, 1);
 }
 </script>
 
@@ -213,7 +216,7 @@ td {
 th {
   font-size: 20px;
   font-weight: bold;
-  width: 200px;
+  width: 180px;
   height: 100px;
 }
 td {
