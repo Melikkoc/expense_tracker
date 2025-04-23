@@ -49,7 +49,7 @@
             <th>Delete</th>
           </tr>
           <tr v-for="(row, index) in summaryRows" :key="index">
-            <td><input type="text" v-model="row.month" /></td>
+            <td><input type="month" v-model="row.month" /></td>
             <td>
               <input type="number" v-model="row.rent" />
             </td>
@@ -170,13 +170,19 @@ function getTotalExpenses() {
 }
 
 function getTotalIncome() {
-  var total_income = transactionRows.value.reduce((acc, row) => {
-    const amount = row.amount;
-    return acc + amount;
-  }, 0);
-
   summaryRows.value.forEach((row) => {
-    row.total_income = total_income;
+    const summaryMonth = row.month;
+
+    const matchingTransactions = transactionRows.value.filter((transaction) => {
+      const transactionMonth = transaction.date?.slice(0, 7);
+      return transactionMonth === summaryMonth;
+    });
+
+    const total = matchingTransactions.reduce(
+      (acc, t) => acc + (t.amount || 0),
+      0
+    );
+    row.total_income = total;
   });
 }
 
