@@ -1,7 +1,7 @@
 <template>
   <main>
     <button @click="addTransactionRow">Add Transaction</button>
-
+    <button @click="exportExpenseTable">export as CSV</button>
     <div class="box">
       <table>
         <caption>
@@ -96,6 +96,7 @@
 <script setup>
 import useLocalStorage from './composables/useLocalStorage';
 import { computed, watch } from 'vue';
+import * as Papa from 'papaparse';
 const expenseTable = useLocalStorage(
   {
     summaryRows: [
@@ -202,6 +203,26 @@ function deleteTransactionRow(index) {
 
 function deleteSummaryRow(index) {
   summaryRows.value.splice(index, 1);
+}
+function exportExpenseTable() {
+  const transactionCsv = Papa.unparse(transactionRows.value);
+  const summaryCsv = Papa.unparse(summaryRows.value);
+
+  const combinedCsv = [transactionCsv, summaryCsv].join('\n');
+
+  downloadCSV(combinedCsv, 'expenseTable.csv');
+}
+
+function downloadCSV(csvData, filename) {
+  const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+
+  link.setAttribute('href', url);
+  link.setAttribute('download', filename);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild();
 }
 
 watch(
