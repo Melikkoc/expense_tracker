@@ -90,6 +90,7 @@
       </table>
     </div>
     <button @click="addSummaryRow">Add Summary</button>
+    <button @click="getIncomeToday">get income today</button>
   </main>
 </template>
 
@@ -97,6 +98,7 @@
 import useLocalStorage from './composables/useLocalStorage';
 import { computed, watch } from 'vue';
 import * as Papa from 'papaparse';
+import { errorMessages } from 'vue/compiler-sfc';
 const expenseTable = useLocalStorage(
   {
     summaryRows: [
@@ -223,6 +225,23 @@ function downloadCSV(csvData, filename) {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild();
+}
+
+function getIncomeToday() {
+  const formatDate = (date) => {
+    const year = String(date.getFullYear());
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  };
+  const currentDate = formatDate(new Date());
+  const todaysTransactions = transactionRows.value.filter(
+    (transaction) => transaction.date === currentDate
+  );
+  const total = todaysTransactions.reduce((acc, t) => acc + (t.amount || 0), 0);
+
+  console.log(total);
 }
 
 watch(
