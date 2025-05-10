@@ -88,7 +88,9 @@
                 v-model="row.remaining"
               />
             </td>
-            <td><button @click="deleteSummaryRow(index)">❌</button></td>
+            <td class="centered">
+              <button @click="deleteSummaryRow(index)">❌</button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -290,24 +292,29 @@ watch(
 main {
   padding: 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #ffffff;
-  color: #000000;
+  background-color: #f8f8f8;
+  color: #333;
   min-height: 100vh;
 }
 
 /* Buttons */
 button {
   margin: 10px 10px 20px 0;
-  padding: 8px 16px;
+  padding: 10px 18px;
   background-color: #5741e5;
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 button:hover {
   background-color: #3f2ac4;
+  transform: translateY(-3px);
+}
+button:active {
+  background-color: #3b279d;
+  transform: translateY(1px);
 }
 
 /* Box around table */
@@ -316,7 +323,11 @@ button:hover {
   background-color: #ffffff;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+.box:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* Table Layout */
@@ -325,10 +336,14 @@ table {
   border-collapse: separate;
   border-spacing: 0 12px;
   margin-bottom: 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.8s ease-out;
 }
 caption {
   caption-side: top;
-  font-size: 1.5em;
+  font-size: 1.6em;
   margin-bottom: 10px;
   font-weight: bold;
   color: #5741e5;
@@ -341,6 +356,8 @@ th {
   padding: 12px;
   font-size: 14px;
   border: none;
+  text-align: center;
+  animation: fadeIn 0.8s ease-out;
 }
 
 /* Table Body Cells */
@@ -351,27 +368,16 @@ td {
   border: none;
   border-bottom: 1px solid #e0e0e0;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+td input {
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+td:hover {
+  background-color: #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-tr th:first-child {
-  border-radius: 5px 0 0 5px;
-}
-
-tr th:last-child {
-  border-radius: 0 5px 5px 0;
-}
-
-/* Rounded corners on first and last td */
-tr td:first-child {
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
-}
-tr td:last-child {
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-}
-
-/* Hover effect */
 tr:hover td {
   background-color: #ecebff;
 }
@@ -382,34 +388,121 @@ input[type='number'],
 input[type='date'],
 input[type='month'] {
   width: 100%;
-  padding: 6px;
+  padding: 8px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 14px;
   background-color: #ffffff;
-  color: #000000;
+  color: #333;
+  transition: all 0.3s ease;
 }
+
+input:hover {
+  transform: scale(1.1);
+}
+
+input:disabled {
+  background-color: #e9ecef; /* Light gray background */
+  color: #6c757d; /* Dimmed text color */
+  border: 1px solid #ccc; /* Optional: make border more subtle */
+  cursor: not-allowed; /* Shows a "not-allowed" cursor */
+  opacity: 0.7; /* Optional: make it slightly transparent */
+  transform: none;
+}
+
 input[type='checkbox'] {
-  transform: scale(1.3);
+  -webkit-appearance: none; /* Remove default checkbox styling */
+  -moz-appearance: none;
+  appearance: none;
+  width: 24px; /* Size of the checkbox */
+  height: 24px;
+  border: 2px solid #5741e5; /* Border color */
+  border-radius: 4px; /* Rounded corners */
+  position: relative;
+  background-color: #fff; /* Background color */
+  transition: all 0.3s ease; /* Smooth transitions */
   cursor: pointer;
 }
 
-td.centered {
-  text-align: center;
-  vertical-align: middle;
+/* Checkbox when checked */
+input[type='checkbox']:checked {
+  background-color: #5741e5; /* Background color when checked */
+  border-color: hsl(248, 76%, 58%); /* Border color when checked */
+}
+
+input[type='checkbox']:hover {
+  background-color: hsl(0, 0%, 85%);
+  border-color: hsla(248, 76%, 58%, 0.9); /* Border color when checked */
+}
+
+/* Creating a custom checkmark */
+input[type='checkbox']:checked::before {
+  content: '✔'; /* The checkmark character */
+  position: absolute;
+  top: 0;
+  left: 3px;
+  color: white;
+  font-size: 18px; /* Size of the checkmark */
+}
+
+/* Hover effect */
+input[type='checkbox']:hover {
+  border-color: #3f2ac4; /* Border color on hover */
+  transform: scale(1.1);
+}
+input[type='checkbox']:active {
+  transform: scale(0.95);
+}
+
+/* Focus effect */
+input[type='checkbox']:focus {
+  outline: none;
+  border-color: #5741e5; /* Border color on focus */
+}
+
+input[type='checkbox']:checked {
+  background-color: #5741e5;
+  color: #5741e5; /* Background color when checked */
+  border-color: #5741e5; /* Border color when checked */
+}
+
+input[type='text']:focus,
+input[type='number']:focus,
+input[type='date']:focus,
+input[type='month']:focus {
+  border-color: #5741e5;
+  background-color: #fafbff;
+}
+
+tr th:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+tr th:last-child {
+  border-radius: 0 5px 5px 0;
 }
 
 /* Delete Button inside table */
 td button {
   background-color: rgba(255, 159, 159, 0.75);
-  padding: 5px 10px;
   color: white;
   border-radius: 4px;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 td button:hover {
   background-color: rgb(255, 159, 159);
+  transform: scale(1.1);
 }
-
+td button:active {
+  transform: scale(0.95);
+}
+td.centered {
+  text-align: center;
+  vertical-align: middle;
+}
 /* Summary Today Section */
 #box-today {
   margin-top: 40px;
@@ -423,10 +516,11 @@ td button:hover {
   display: inline-block;
   border: 1px solid #5741e5;
   text-align: center;
+  animation: fadeIn 1s ease-out;
 }
 #today h2 {
   margin-bottom: 10px;
-  font-size: 1.4em;
+  font-size: 1.5em;
   color: #5741e5;
 }
 #today input {
@@ -438,5 +532,30 @@ td button:hover {
   padding: 8px;
   border-radius: 4px;
   width: 100%;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  table {
+    font-size: 12px;
+  }
+  button {
+    padding: 6px 12px;
+  }
+  #today {
+    padding: 15px;
+  }
 }
 </style>
