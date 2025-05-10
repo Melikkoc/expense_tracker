@@ -91,6 +91,16 @@
     </div>
     <button @click="addSummaryRow">Add Summary</button>
     <button @click="getIncomeToday">get income today</button>
+    <div id="box-today">
+      <div id="today">
+        <h2>Summary Today</h2>
+        <input
+          type="number"
+          disabled="disabled"
+          v-model="summaryToday.remainingToday"
+        />
+      </div>
+    </div>
   </main>
 </template>
 
@@ -129,6 +139,12 @@ const expenseTable = useLocalStorage(
     ],
   },
   'expenseTable'
+);
+const summaryToday = useLocalStorage(
+  {
+    remainingToday: 0,
+  },
+  'summaryToday'
 );
 const transactionRows = computed(() => expenseTable.value.transactionRows);
 const summaryRows = computed(() => expenseTable.value.summaryRows);
@@ -242,6 +258,8 @@ function getIncomeToday() {
   const total = todaysTransactions.reduce((acc, t) => acc + (t.amount || 0), 0);
 
   console.log(total);
+
+  summaryToday.value.remainingToday = total;
 }
 
 watch(
