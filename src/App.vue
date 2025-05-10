@@ -29,10 +29,14 @@
             <td><input type="text" v-model="row.type" /></td>
             <td><input type="text" v-model="row.note" /></td>
             <td><input type="text" v-model="row.paymentMethod" /></td>
-            <td><input type="checkbox" v-model="row.recurring" /></td>
+            <td class="centered">
+              <input type="checkbox" v-model="row.recurring" />
+            </td>
             <td><input type="text" v-model="row.tags" /></td>
             <td><input type="number" v-model="row.amount" /></td>
-            <td><button @click="deleteTransactionRow(index)">❌</button></td>
+            <td class="centered">
+              <button @click="deleteTransactionRow(index)">❌</button>
+            </td>
           </tr>
         </tbody>
         <tbody>
@@ -281,27 +285,158 @@ watch(
 );
 </script>
 
-<style>
+<style scoped>
+/* Layout Container */
+main {
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #ffffff;
+  color: #000000;
+  min-height: 100vh;
+}
+
+/* Buttons */
+button {
+  margin: 10px 10px 20px 0;
+  padding: 8px 16px;
+  background-color: #5741e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+button:hover {
+  background-color: #3f2ac4;
+}
+
+/* Box around table */
 .box {
+  overflow-x: auto;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Layout */
+table {
   width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 12px;
+  margin-bottom: 30px;
+}
+caption {
+  caption-side: top;
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #5741e5;
+}
+
+/* Table Header */
+th {
+  background-color: #5741e5;
+  color: white;
+  padding: 12px;
+  font-size: 14px;
+  border: none;
+}
+
+/* Table Body Cells */
+td {
+  padding: 12px;
+  background-color: #f9f9f9;
+  color: #000000;
+  border: none;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+tr th:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+tr th:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+/* Rounded corners on first and last td */
+tr td:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+tr td:last-child {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+/* Hover effect */
+tr:hover td {
+  background-color: #ecebff;
+}
+
+/* Inputs inside table */
+input[type='text'],
+input[type='number'],
+input[type='date'],
+input[type='month'] {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #ffffff;
+  color: #000000;
+}
+input[type='checkbox'] {
+  transform: scale(1.3);
+  cursor: pointer;
+}
+
+td.centered {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Delete Button inside table */
+td button {
+  background-color: rgba(255, 159, 159, 0.75);
+  padding: 5px 10px;
+  color: white;
+  border-radius: 4px;
+}
+td button:hover {
+  background-color: rgb(255, 159, 159);
+}
+
+/* Summary Today Section */
+#box-today {
+  margin-top: 40px;
   display: flex;
   justify-content: center;
-  align-items: center;
 }
-table,
-th,
-td {
+#today {
+  background-color: #f1efff;
+  padding: 20px;
+  border-radius: 6px;
+  display: inline-block;
+  border: 1px solid #5741e5;
   text-align: center;
-  border: solid white 1px;
-  border-collapse: collapse;
 }
-th {
-  font-size: 20px;
+#today h2 {
+  margin-bottom: 10px;
+  font-size: 1.4em;
+  color: #5741e5;
+}
+#today input {
+  font-size: 16px;
   font-weight: bold;
-  width: 180px;
-  height: 100px;
-}
-td {
-  height: 50px;
+  border: none;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 8px;
+  border-radius: 4px;
+  width: 100%;
 }
 </style>
